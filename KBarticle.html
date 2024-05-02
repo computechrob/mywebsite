@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Managing PowerShell Script Execution Policy</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0 180px; /* Increased padding to 40px */
+        background-color: #f0f0f0;
+        position: relative;
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+
+      p,
+      ol {
+        margin-bottom: 20px;
+        color: #555;
+      }
+
+      li {
+        margin-bottom: 10px;
+      }
+
+      strong {
+        font-weight: bold;
+      }
+
+      #backToTopButton {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+        display: none;
+      }
+
+      .likeButton,
+      .dislikeButton {
+        display: inline-block;
+        margin: 0 10px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .likeButton:hover,
+      .dislikeButton:hover {
+        background-color: #0056b3;
+      }
+
+      .liked,
+      .disliked {
+        background-color: #28a745 !important;
+      }
+
+      #likeDislikeButtons {
+        text-align: center;
+      }
+
+      #likeDislikeCounts {
+        text-align: center;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Managing PowerShell Script Execution Policy</h1>
+    <h2>Introduction:</h2>
+    <p>
+      The PowerShell Script Execution Policy determines the level of security
+      surrounding the execution of PowerShell scripts on a system. It's
+      essential to configure this policy appropriately to balance security with
+      operational requirements. This article provides instructions for adjusting
+      the PowerShell Script Execution Policy both through Group Policy and
+      PowerShell commands.
+    </p>
+
+    <h2>Changing via Group Policy:</h2>
+    <ol>
+      <li>
+        <h3>Navigate to Group Policy Editor:</h3>
+        <p>
+          Press <code>Win + R</code>, type <code>gpedit.msc</code>, and press
+          Enter.
+        </p>
+      </li>
+      <li>
+        <h3>Set "Turn on Script Execution" Policy:</h3>
+        <p>
+          In the Group Policy Editor, navigate to
+          <code>Computer Configuration</code> &gt;
+          <code>Administrative Templates</code> &gt;
+          <code>Windows Components</code> &gt; <code>Windows PowerShell</code>.
+        </p>
+        <p>Locate the "Turn on Script Execution" policy.</p>
+        <p>Double-click the policy to modify its settings.</p>
+        <p>
+          Choose one of the following options: "Not Configured", "Disabled", or
+          "Enabled".
+        </p>
+        <p>Click Apply and then OK to save the changes.</p>
+      </li>
+
+      <li>
+        <h3>Update Group Policy:</h3>
+        <p>Open Command Prompt as an administrator.</p>
+        <p>
+          Type <code>gpupdate</code> and press Enter to update the group policy
+          settings.
+        </p>
+      </li>
+
+      <li>
+        <h3>Verify Changes:</h3>
+        <p>Open PowerShell ISE (close and reopen if already open).</p>
+        <p>
+          Run <code>Get-ExecutionPolicy -List</code> to check if the change has
+          taken effect.
+        </p>
+        <p>
+          The execution policy for the <code>MachinePolicy</code> scope should
+          reflect the modified setting.
+        </p>
+      </li>
+    </ol>
+
+    <h2>Changing via PowerShell:</h2>
+    <ol>
+      <li>
+        <h3>Open PowerShell:</h3>
+        <p>Open PowerShell as an administrator.</p>
+      </li>
+
+      <li>
+        <h3>Set Execution Policy:</h3>
+        <p>
+          Run the command:
+          <code>Set-ExecutionPolicy Unrestricted -Scope LocalMachine</code>
+        </p>
+        <p>
+          (Note: Omitting the <code>-Scope</code> parameter defaults to the
+          <code>LocalMachine</code> scope.)
+        </p>
+      </li>
+
+      <li>
+        <h3>Verify Changes:</h3>
+        <p>
+          Run <code>Get-ExecutionPolicy -List</code> to confirm the updated
+          policy.
+        </p>
+        <p>
+          The execution policy for the <code>LocalMachine</code> scope should
+          display the new setting.
+        </p>
+      </li>
+    </ol>
+
+    <h2>Important Notes:</h2>
+    <ul>
+      <li>
+        When using <code>Get-ExecutionPolicy -List</code>, the policy set in
+        <code>MachinePolicy</code> scope takes precedence over
+        <code>LocalMachine</code> scope.
+      </li>
+      <li>
+        Adjusting the execution policy to "Unrestricted" can pose security
+        risks. Ensure understanding of the implications before making changes.
+      </li>
+      <li>
+        Test the changes in a non-production environment before applying them in
+        a production setting.
+      </li>
+    </ul>
+
+    <h2>Conclusion:</h2>
+    <p>
+      Managing the PowerShell Script Execution Policy is crucial for maintaining
+      a secure environment while allowing necessary script execution. Whether
+      through Group Policy or PowerShell commands, following these instructions
+      ensures that the policy is configured appropriately for your system's
+      requirements.
+    </p>
+
+    <div>
+      <a href="index.html">Home</a>
+    </div>
+    <div>
+      <a href="hi.html">Network Connectivity Troubleshooting</a>
+    </div>
+    <div>
+      <a href="mailto:robertluisv1@gmail.com">Contact me via email</a>
+    </div>
+
+    <button id="changeBackgroundButton">Change Background Color</button>
+
+    <div id="likeDislikeButtons">
+      <button class="likeButton" onclick="toggleLike()">Like</button>
+      <button class="dislikeButton" onclick="toggleDislike()">Dislike</button>
+    </div>
+
+    <div id="likeDislikeCounts">
+      <p>Likes: <span id="likes">0</span></p>
+      <p>Dislikes: <span id="dislikes">0</span></p>
+    </div>
+
+    <button id="backToTopButton" onclick="scrollToTop()">Back to Top</button>
+
+    <script>
+      var likes = 0;
+      var dislikes = 0;
+      var likeClicked = false;
+      var dislikeClicked = false;
+
+      function toggleLike() {
+        if (!likeClicked) {
+          likes++;
+          document.getElementById("likes").textContent = likes;
+          likeClicked = true;
+          dislikeClicked = false;
+          document.querySelector(".likeButton").classList.add("liked");
+          document.querySelector(".dislikeButton").classList.remove("disliked");
+          dislikes = 0; // Reset dislikes counter
+          document.getElementById("dislikes").textContent = dislikes;
+        } else {
+          likes--;
+          document.getElementById("likes").textContent = likes;
+          likeClicked = false;
+          document.querySelector(".likeButton").classList.remove("liked");
+        }
+      }
+
+      function toggleDislike() {
+        if (!dislikeClicked) {
+          dislikes++;
+          document.getElementById("dislikes").textContent = dislikes;
+          dislikeClicked = true;
+          likeClicked = false;
+          document.querySelector(".dislikeButton").classList.add("disliked");
+          document.querySelector(".likeButton").classList.remove("liked");
+          likes = 0; // Reset likes counter
+          document.getElementById("likes").textContent = likes;
+        } else {
+          dislikes--;
+          document.getElementById("dislikes").textContent = dislikes;
+          dislikeClicked = false;
+          document.querySelector(".dislikeButton").classList.remove("disliked");
+        }
+      }
+
+      window.onscroll = function () {
+        scrollFunction();
+      };
+
+      function scrollFunction() {
+        if (
+          document.body.scrollTop > 20 ||
+          document.documentElement.scrollTop > 20
+        ) {
+          document.getElementById("backToTopButton").style.display = "block";
+        } else {
+          document.getElementById("backToTopButton").style.display = "none";
+        }
+      }
+
+      function scrollToTop() {
+        var currentPosition =
+          document.documentElement.scrollTop || document.body.scrollTop;
+        if (currentPosition > 0) {
+          window.requestAnimationFrame(scrollToTop);
+          window.scrollTo(0, currentPosition - currentPosition / 8);
+        }
+      }
+
+      document
+        .getElementById("changeBackgroundButton")
+        .addEventListener("click", function () {
+          document.body.style.backgroundColor = "#000000"; // Change to black color
+          document.body.style.color = "#ffffff"; // Change text color to white
+        });
+    </script>
+  </body>
+</html>
